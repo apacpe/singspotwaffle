@@ -6,6 +6,7 @@ const MongoClient = require('mongodb').MongoClient;
 var port = process.env.PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 const cookieSession = [];
 
 app.set("view engine", "ejs");
@@ -84,3 +85,6 @@ app.get('/admin', (req, res) => {
 
 })
 
+app.post('/slack', (req, res) => {
+	console.log(req.body.email);
+})

@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<title>Admin page</title>
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	</head>
 	<body>
 		<h1>Hi admin!</h1>
@@ -38,21 +39,22 @@
 // need server to hit https://slack.com/api/users.lookupByEmail?email=jlin@hubspot.com&token=xoxp-339931371808-438491634368-710544668736-8df5d0c33e8fc666e8259080c198c83f to get the slack userID, then 
 // post to webhook https://hooks.slack.com/services/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 a message
 $("button").click(function(){
+	var userEmail = $(this).attr("id"); 
+	console.log(userEmail);
 
 	$.ajax({
-	    type: "POST",
-	    url: "/slack",
-	    // The key needs to match your method's input parameter (case-sensitive).
-	    data: JSON.stringify({ Markers: markers }),
+		type: "POST",
+		url: "/slack", 
+		data: JSON.stringify({ email: userEmail }),
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "json",
-	    success: function(data){alert(data);},
-	    failure: function(errMsg) {
-	        alert(errMsg);
-	    }
-	});
+		success: function(result){
+    		console.log('success');
+  		}
+  	});
 
 });
 </script>
+
 	</body>
 </html>
