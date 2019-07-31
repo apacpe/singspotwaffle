@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
+const request = require('request-promise-native');
 const MongoClient = require('mongodb').MongoClient;
+
 
 var port = process.env.PORT || 3000;
 
@@ -85,6 +87,46 @@ app.get('/admin', (req, res) => {
 
 })
 
-app.post('/slack', (req, res) => {
+app.post('/slack', async (req, res) => {
 	console.log(req.body.email);
-})
+	var userEmail = req.body.email;
+	var token = 'xoxp-362346574368-364091480439-699939285443-3eb8f82a2e3bb7d7ab79d2b346da157b';
+	var url = "https://slack.com/api/users.lookupByEmail?email=" + userEmail + "&token=" + token;
+
+	const slackUser = async() => {
+		try {
+			const data = await request.get(url, {json: true});
+			return data;
+		} catch (e) {
+			return {msg: e.message}
+		}
+	};
+
+	const slackUserId = await slackUser();
+
+	const slackMsg = async() => {
+		try {
+			var options = {
+				method: 'POST',
+				uri: 'https://hooks.slack.com/services/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',
+				json: true,
+				body: {
+					"text": "Hi <@" + slackUserId.user.id + "> your waffle is ready!"
+				}
+			};
+			request(options, (err, res, body) => {
+				if (err) {
+					console.error('error posting json', err)
+					throw err
+				}
+				console.log('body:', body);
+				return body;
+			});
+		} catch(e) {
+			return {msg: e.message}
+		}
+	};
+
+	const sendSlack = await slackMsg();
+	res.send(true);
+});

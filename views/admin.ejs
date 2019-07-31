@@ -2,6 +2,11 @@
 	<head>
 		<title>Admin page</title>
 		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<style>
+			table {
+				border-spacing:0;
+			}
+		</style>
 	</head>
 	<body>
 		<h1>Hi admin!</h1>
@@ -9,23 +14,26 @@
 				<% if (submission!='') { %>
 					<table class="formresults" align="center">
 							<tr>
+								<th>Submision timestamp</th>
 								<th>Name</th>
 								<th>Email</th>
-								<th>Submision timestamp</th>
 							</tr>
 							<% for (var i=0; i<submission.length; i++) { %>
 								<tr>
 									<td>
+						      			<%= submission[i].submitstamp %>
+						    		</td>
+						    		<td>
 						      			<%= submission[i].name %>
 						    		</td>
 						    		<td>
 						      			<%= submission[i].email %>
 						    		</td>
 						    		<td>
-						      			<%= submission[i].submitstamp %>
+						    			<button id=<%= submission[i].email %>>Send slack!</button>
 						    		</td>
 						    		<td>
-						    			<button id=<%= submission[i].email %>>Send slack!</button>
+						    			<input type="checkbox" name="collected" autocomplete="off">
 						    		</td>
 								</tr>
 							<% } %>
@@ -36,24 +44,40 @@
 			</div>
 
 <script>
-// need server to hit https://slack.com/api/users.lookupByEmail?email=jlin@hubspot.com&token=xoxp-339931371808-438491634368-710544668736-8df5d0c33e8fc666e8259080c198c83f to get the slack userID, then 
-// post to webhook https://hooks.slack.com/services/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 a message
 $("button").click(function(){
 	var userEmail = $(this).attr("id"); 
 	console.log(userEmail);
+	var active = $(this);
 
 	$.ajax({
+		context: active,
 		type: "POST",
 		url: "/slack", 
 		data: JSON.stringify({ email: userEmail }),
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "json",
 		success: function(result){
-    		console.log('success');
+    		active.parents("tr").css({"background-color": "lightgreen"});
   		}
   	});
 
 });
+
+var checkboxValues = JSON.parse(localStorage.getItem('checkboxValues')) || {};
+var $checkboxes = $("#checkbox-container :checkbox");
+
+$checkboxes.on("change", function(){
+  $checkboxes.each(function(){
+    checkboxValues[this.id] = this.checked;
+  });
+  localStorage.setItem("checkboxValues", JSON.stringify(checkboxValues));
+});
+
+$.each(checkboxValues, function(key, value) {
+  $("#" + key).prop('checked', value);
+});
+
+// https://www.sitepoint.com/quick-tip-persist-checkbox-checked-state-after-page-reload/ 
 </script>
 
 	</body>
