@@ -139,6 +139,5 @@ app.post('/slack', async (req, res) => {
 		}
 	);
 
-
 	res.send(true);
 });
