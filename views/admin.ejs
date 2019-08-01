@@ -6,6 +6,9 @@
 			table {
 				border-spacing:0;
 			}
+			.Yes {
+				background-color:lightgreen;
+			}
 		</style>
 	</head>
 	<body>
@@ -19,7 +22,7 @@
 								<th>Email</th>
 							</tr>
 							<% for (var i=0; i<submission.length; i++) { %>
-								<tr>
+								<tr class=<% if (submission[i].slackSent!='') { %><%= submission[i].slackSent %><% } %>>
 									<td>
 						      			<%= submission[i].submitstamp %>
 						    		</td>
@@ -30,10 +33,11 @@
 						      			<%= submission[i].email %>
 						    		</td>
 						    		<td>
-						    			<button id=<%= submission[i].email %>>Send slack!</button>
+						    			<button name="slack" id=<%= submission[i].email %>>Send slack!</button>
 						    		</td>
 						    		<td>
 						    			<input type="checkbox" name="collected" autocomplete="off">
+						    			<button></button>
 						    		</td>
 								</tr>
 							<% } %>
@@ -44,7 +48,7 @@
 			</div>
 
 <script>
-$("button").click(function(){
+$("button[name='slack']").click(function(){
 	var userEmail = $(this).attr("id"); 
 	console.log(userEmail);
 	var active = $(this);

@@ -128,5 +128,17 @@ app.post('/slack', async (req, res) => {
 	};
 
 	const sendSlack = await slackMsg();
+
+	const today = new Date();
+	const todayDate = today.getDate();
+	const todayMonth = today.getMonth();
+
+	collectionWaffle.updateMany( { email: userEmail, submitmonth: todayMonth, submitdate: todayDate },
+		{
+			$set: { slackSent: 'Yes' }
+		}
+	);
+
+
 	res.send(true);
 });
