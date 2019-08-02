@@ -2,12 +2,22 @@
 	<head>
 		<title>Admin page</title>
 		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<!-- jQuery Modal -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 		<style>
 			table {
 				border-spacing:0;
 			}
 			.Yes {
 				background-color:lightgreen;
+			}
+			button[name="collected"] {
+				padding: 8px;
+    			background-color: aliceblue;
+			}
+			button[name="collected"].collected {
+				background-color: darkorange;
 			}
 		</style>
 	</head>
@@ -36,15 +46,40 @@
 						    			<button name="slack" id=<%= submission[i].email %>>Send slack!</button>
 						    		</td>
 						    		<td>
-						    			<button name="collected" id=<%= submission[i].email %>></button>
+						    			<button name="collected" id=<%= submission[i].email %> class=<% if (submission[i].waffleCollected!='') { %><%= submission[i].waffleCollected %><% } %>></button>
 						    		</td>
+						    		<td>
+						    			<a href="#<%= submission[i]._id %>" rel="modal:open" id=<%= submission[i].email %>>Edit</a>
+						    		</td>		
 								</tr>
+								<div id=<%= submission[i]._id %> class="modal">
+									<div>
+										<p>Edit the submission:</p>
+										<input type='text' name='editname' required value=<%= submission[i].name %>>
+										<input type='text' name='editemail' required value=<%= submission[i].email %>>
+										<button name="edit" id=<%= submission[i].email %>>Save</button>
+									</div>
+									<br>
+									<a href="#" rel="modal:close">Close</a>
+								</div>
 							<% } %>
 					</table>
 				<% } else { %>
 					<p>No submissions today yet</p>
 				<% } %>
 			</div>
+		<h3>Add someone to the queue</h3>
+		<form action="/submitadmin" method="post">
+			Name:
+			<input type='text' name='name' placeholder='Your name' required>
+			Email:
+			<input type='text' name='email' required>
+			<input type="submit" name="submit" value="Submit">
+		</form>
+
+
+
+
 
 <script>
 $("button[name='slack']").click(function(){
@@ -66,21 +101,49 @@ $("button[name='slack']").click(function(){
 
 });
 
-var checkboxValues = JSON.parse(localStorage.getItem('checkboxValues')) || {};
-var $checkboxes = $("#checkbox-container :checkbox");
+$("button[name='collected']").click(function(){
+	var userEmail = $(this).attr("id"); 
+	console.log(userEmail);
+	var active = $(this);
 
-$checkboxes.on("change", function(){
-  $checkboxes.each(function(){
-    checkboxValues[this.id] = this.checked;
-  });
-  localStorage.setItem("checkboxValues", JSON.stringify(checkboxValues));
+	$.ajax({
+		context: active,
+		type: "POST",
+		url: "/collected", 
+		data: JSON.stringify({ email: userEmail }),
+	    contentType: "application/json; charset=utf-8",
+	    dataType: "json",
+		success: function(result){
+    		active.css({"background-color": "darkorange"});
+  		}
+  	});
+
 });
 
-$.each(checkboxValues, function(key, value) {
-  $("#" + key).prop('checked', value);
-});
+$("button[name='edit']").click(function(){
 
-// https://www.sitepoint.com/quick-tip-persist-checkbox-checked-state-after-page-reload/ 
+var userEmail = $(this).attr("id"); 
+var editName = $(this).siblings("input[name='editname']").val();
+var editEmail = $(this).siblings("input[name='editemail']").val();
+var active = $(this);
+
+	$.ajax({
+		context: active,
+		type: "POST",
+		url: "/edit", 
+		data: JSON.stringify({ email: userEmail, newEmail: editEmail, newName: editName }),
+	    contentType: "application/json; charset=utf-8",
+	    dataType: "json",
+		success: function(result){
+    		active.parent().html('Changes saved!');
+  		}
+  	});
+
+
+});
+ 
+
+
 </script>
 
 	</body>

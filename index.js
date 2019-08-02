@@ -54,6 +54,17 @@ app.post('/submit', (req, res) => {
 	});  
 })
 
+app.post('/submitadmin', (req, res) => {
+	req.body.created_at = new Date();
+	var submitStamp = req.body.created_at;
+	var submitDate = submitStamp.getDate();
+	var submitMonth = submitStamp.getMonth();
+	collectionWaffle.insertOne({ name: req.body.name, email: req.body.email, submitstamp: req.body.created_at, submitdate: submitDate, submitmonth: submitMonth, cookie: req.sessionID }, (err, result) => {
+		console.log('saved waffle form submission');
+		res.redirect('/admin');
+	});  
+})
+
 app.get('/login', (req, res) => {
 	if (cookieSession.includes(req.sessionID)) {
 		res.redirect('/admin');
@@ -90,7 +101,7 @@ app.get('/admin', (req, res) => {
 app.post('/slack', async (req, res) => {
 	console.log(req.body.email);
 	var userEmail = req.body.email;
-	var token = 'xoxp-362346574368-364091480439-699939285443-3eb8f82a2e3bb7d7ab79d2b346da157b';
+	var token = 'xoxp-2152023175-216767779619-713116306581-85259aec74488bafdd0f8a3419ddd05f';
 	var url = "https://slack.com/api/users.lookupByEmail?email=" + userEmail + "&token=" + token;
 
 	const slackUser = async() => {
@@ -108,7 +119,7 @@ app.post('/slack', async (req, res) => {
 		try {
 			var options = {
 				method: 'POST',
-				uri: 'https://hooks.slack.com/services/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',
+				uri: 'https://hooks.slack.com/services/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',
 				json: true,
 				body: {
 					"text": "Hi <@" + slackUserId.user.id + "> your waffle is ready!"
@@ -141,3 +152,36 @@ app.post('/slack', async (req, res) => {
 
 	res.send(true);
 });
+
+app.post('/collected', async (req, res) => {
+	var userEmail = req.body.email;
+	const today = new Date();
+	const todayDate = today.getDate();
+	const todayMonth = today.getMonth();
+
+	collectionWaffle.updateMany( { email: userEmail, submitmonth: todayMonth, submitdate: todayDate },
+		{
+			$set: { waffleCollected: 'collected' }
+		}
+	);
+
+	res.send(true);
+});
+
+app.post('/edit', async (req, res) => {
+	var userEmail = req.body.email;
+	var newEmail = req.body.newEmail;
+	var newName = req.body.newName;
+	const today = new Date();
+	const todayDate = today.getDate();
+	const todayMonth = today.getMonth();
+
+	collectionWaffle.updateMany( { email: userEmail, submitmonth: todayMonth, submitdate: todayDate },
+		{
+			$set: { name: newName, email: newEmail }
+		}
+	);
+
+	res.send(true);	
+});
+
