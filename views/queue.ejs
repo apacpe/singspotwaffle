@@ -1,0 +1,86 @@
+<html>
+	<head>
+		<title>Waffle order queue</title>
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	</head>
+	<body>
+		<h1>Waffle waiting line</h1>
+
+		<% if (submission!='') { %>
+					<table class="formresults" align="center">
+							<tr>
+								<th>Submision timestamp</th>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Estimated collection time</th>
+								<th>Estimated waiting time</th>
+							</tr>
+							<% for (var i=0; i<submission.length; i++) { %>
+								<tr class=<% if (submission[i].slackSent!='') { %><%= submission[i].slackSent %><% } %>>
+									<td>
+						      			<%= submission[i].submitdate %> <%= submission[i].submitmonthname %> <%= submission[i].submithour %>:<%= submission[i].submitminute %>:<%= submission[i].submitsecond %>
+						    		</td>
+						    		<td>
+						      			<%= submission[i].name %>
+						    		</td>
+						    		<td class="useremail">
+						      			<%= submission[i].email %>
+						    		</td>
+						    		<td class="collectiontime">
+						    		</td>
+						    		<td class="waitingtime">
+						    		</td>	
+						    		<td style="display:none;" class="hour"> <!-- gethours-->
+						    			<%= submission[i].submithour %>
+						    		</td>
+						    		<td style="display:none;" class="minute"> <!-- getminutes-->
+						    			<%= submission[i].submitminute %>
+						    		</td>
+						    		<td style="display:none;" class="second"> <!-- getseconds-->
+						    			<%= submission[i].submitsecond %>
+						    		</td>
+								</tr>
+
+							<% } %>
+					</table>
+				<% } else { %>
+					<p>No one is in the queue!</p>
+				<% } %>
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+$(".collectiontime").each(function() {
+  var now = new Date();
+  var submitted = new Date();
+  var submithour = $(this).siblings('.hour').text().trim();
+  var submitminute = $(this).siblings('.minute').text().trim();
+  var submitsecond = $(this).siblings('.second').text().trim();
+
+  submitted.setHours(submithour, submitminute, submitsecond);
+  submitted.setMinutes(submitted.getMinutes() + 5);
+  var collectionTime = submitted.getHours() + ":" + submitted.getMinutes() + ":" + submitted.getSeconds();
+
+  $(this).text(collectionTime);
+  var diff = submitted - now;
+  var minutes = Math.floor((diff % 3.6e5) / 6e4);
+  var seconds = Math.floor((diff % 6e4) / 1000);
+
+  if (minutes < 0) {
+  	$(this).siblings(".waitingtime").text('Your waffle should be ready!');
+  } else {
+  	$(this).siblings(".waitingtime").text(minutes + " minutes " + seconds + " seconds");
+  }
+
+});
+
+</script>
+
+
+	</body>
+</html>

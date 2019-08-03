@@ -39,14 +39,14 @@
 						    		<td>
 						      			<%= submission[i].name %>
 						    		</td>
-						    		<td>
+						    		<td class="useremail">
 						      			<%= submission[i].email %>
 						    		</td>
 						    		<td>
-						    			<button name="slack" id=<%= submission[i].email %>>Send slack!</button>
+						    			<button name="slack" id=<%= submission[i]._id %>>Send slack!</button>
 						    		</td>
 						    		<td>
-						    			<button name="collected" id=<%= submission[i].email %> class=<% if (submission[i].waffleCollected!='') { %><%= submission[i].waffleCollected %><% } %>></button>
+						    			<button name="collected" id=<%= submission[i]._id %> class=<% if (submission[i].waffleCollected!='') { %><%= submission[i].waffleCollected %><% } %>></button>
 						    		</td>
 						    		<td>
 						    			<a href="#<%= submission[i]._id %>" rel="modal:open" id=<%= submission[i].email %>>Edit</a>
@@ -57,7 +57,7 @@
 										<p>Edit the submission:</p>
 										<input type='text' name='editname' required value=<%= submission[i].name %>>
 										<input type='text' name='editemail' required value=<%= submission[i].email %>>
-										<button name="edit" id=<%= submission[i].email %>>Save</button>
+										<button name="edit" id=<%= submission[i]._id %>>Save</button>
 									</div>
 									<br>
 									<a href="#" rel="modal:close">Close</a>
@@ -83,7 +83,8 @@
 
 <script>
 $("button[name='slack']").click(function(){
-	var userEmail = $(this).attr("id"); 
+	var userEmail = $(this).parent('td').siblings('.useremail').text().trim(); 
+	var userId = $(this).attr("id");
 	console.log(userEmail);
 	var active = $(this);
 
@@ -91,7 +92,7 @@ $("button[name='slack']").click(function(){
 		context: active,
 		type: "POST",
 		url: "/slack", 
-		data: JSON.stringify({ email: userEmail }),
+		data: JSON.stringify({ email: userEmail, userid: userId }),
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "json",
 		success: function(result){
@@ -102,15 +103,14 @@ $("button[name='slack']").click(function(){
 });
 
 $("button[name='collected']").click(function(){
-	var userEmail = $(this).attr("id"); 
-	console.log(userEmail);
+	var userId = $(this).attr("id"); 
 	var active = $(this);
 
 	$.ajax({
 		context: active,
 		type: "POST",
 		url: "/collected", 
-		data: JSON.stringify({ email: userEmail }),
+		data: JSON.stringify({ userid: userId }),
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "json",
 		success: function(result){
@@ -122,7 +122,7 @@ $("button[name='collected']").click(function(){
 
 $("button[name='edit']").click(function(){
 
-var userEmail = $(this).attr("id"); 
+var userId = $(this).attr("id"); 
 var editName = $(this).siblings("input[name='editname']").val();
 var editEmail = $(this).siblings("input[name='editemail']").val();
 var active = $(this);
@@ -131,18 +131,18 @@ var active = $(this);
 		context: active,
 		type: "POST",
 		url: "/edit", 
-		data: JSON.stringify({ email: userEmail, newEmail: editEmail, newName: editName }),
+		data: JSON.stringify({ userid: userId, newEmail: editEmail, newName: editName }),
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "json",
 		success: function(result){
     		active.parent().html('Changes saved!');
+    		setTimeout(location.reload.bind(location), 800);
   		}
   	});
 
 
 });
  
-
 
 </script>
 

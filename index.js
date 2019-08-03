@@ -3,6 +3,7 @@ const app = express();
 const session = require('express-session');
 const request = require('request-promise-native');
 const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectID;
 
 
 var port = process.env.PORT || 3000;
@@ -12,6 +13,7 @@ app.use(express.json());
 const cookieSession = [];
 
 app.set("view engine", "ejs");
+app.use('/static', express.static('public'));
 
 app.use(session({
   secret: Math.random().toString(36).substring(2),
@@ -48,10 +50,31 @@ app.post('/submit', (req, res) => {
 	var submitStamp = req.body.created_at;
 	var submitDate = submitStamp.getDate();
 	var submitMonth = submitStamp.getMonth();
-	collectionWaffle.insertOne({ name: req.body.name, email: req.body.email, submitstamp: req.body.created_at, submitdate: submitDate, submitmonth: submitMonth, cookie: req.sessionID }, (err, result) => {
+	var submitHour = submitStamp.getHours();
+	var submitMinute = submitStamp.getMinutes();
+	var submitSecond = submitStamp.getSeconds();
+
+	const monthNames = ["January", "February", "March", "April", "May", "June",
+	  "July", "August", "September", "October", "November", "December"
+	];
+
+	var submitMonthName = monthNames[submitMonth];
+
+	collectionWaffle.insertOne({ name: req.body.name, email: req.body.email, submitstamp: submitStamp, submitmonthname: submitMonthName, submitdate: submitDate, submitmonth: submitMonth, submithour: submitHour, submitminute: submitMinute, submitsecond: submitSecond, cookie: req.sessionID }, (err, result) => {
 		console.log('saved waffle form submission');
-		res.send('thanks!');
+		res.redirect('/queue');
 	});  
+})
+
+app.get('/queue', (req, res) => {
+	const today = new Date();
+	const todayDate = today.getDate();
+	const todayMonth = today.getMonth();
+	
+	collectionWaffle.find( { submitdate: todayDate, submitmonth: todayMonth, waffleCollected: {$exists: false} }).sort({submitstamp: 1}).toArray((err, result) => {
+			console.log(result);
+			res.render('queue', {submission: result});
+		});
 })
 
 app.post('/submitadmin', (req, res) => {
@@ -59,10 +82,20 @@ app.post('/submitadmin', (req, res) => {
 	var submitStamp = req.body.created_at;
 	var submitDate = submitStamp.getDate();
 	var submitMonth = submitStamp.getMonth();
-	collectionWaffle.insertOne({ name: req.body.name, email: req.body.email, submitstamp: req.body.created_at, submitdate: submitDate, submitmonth: submitMonth, cookie: req.sessionID }, (err, result) => {
+	var submitHour = submitStamp.getHours();
+	var submitMinute = submitStamp.getMinutes();
+	var submitSecond = submitStamp.getSeconds();
+
+	const monthNames = ["January", "February", "March", "April", "May", "June",
+	  "July", "August", "September", "October", "November", "December"
+	];
+
+	var submitMonthName = monthNames[submitMonth];
+
+	collectionWaffle.insertOne({ name: req.body.name, email: req.body.email, submitstamp: submitStamp, submitmonthname: submitMonthName, submitdate: submitDate, submitmonth: submitMonth, submithour: submitHour, submitminute: submitMinute, submitsecond: submitSecond, cookie: req.sessionID }, (err, result) => {
 		console.log('saved waffle form submission');
 		res.redirect('/admin');
-	});  
+	});   
 })
 
 app.get('/login', (req, res) => {
@@ -100,6 +133,7 @@ app.get('/admin', (req, res) => {
 
 app.post('/slack', async (req, res) => {
 	console.log(req.body.email);
+	var userId = req.body.userid;
 	var userEmail = req.body.email;
 	var token = 'xoxp-2152023175-216767779619-713116306581-85259aec74488bafdd0f8a3419ddd05f';
 	var url = "https://slack.com/api/users.lookupByEmail?email=" + userEmail + "&token=" + token;
@@ -144,7 +178,7 @@ app.post('/slack', async (req, res) => {
 	const todayDate = today.getDate();
 	const todayMonth = today.getMonth();
 
-	collectionWaffle.updateMany( { email: userEmail, submitmonth: todayMonth, submitdate: todayDate },
+	collectionWaffle.updateMany( { _id: ObjectId(userId), submitmonth: todayMonth, submitdate: todayDate },
 		{
 			$set: { slackSent: 'Yes' }
 		}
@@ -154,12 +188,12 @@ app.post('/slack', async (req, res) => {
 });
 
 app.post('/collected', async (req, res) => {
-	var userEmail = req.body.email;
+	var userId = req.body.userid;
 	const today = new Date();
 	const todayDate = today.getDate();
 	const todayMonth = today.getMonth();
 
-	collectionWaffle.updateMany( { email: userEmail, submitmonth: todayMonth, submitdate: todayDate },
+	collectionWaffle.updateMany( { _id: ObjectId(userId), submitmonth: todayMonth, submitdate: todayDate },
 		{
 			$set: { waffleCollected: 'collected' }
 		}
@@ -169,14 +203,14 @@ app.post('/collected', async (req, res) => {
 });
 
 app.post('/edit', async (req, res) => {
-	var userEmail = req.body.email;
+	var userId = req.body.userid;
 	var newEmail = req.body.newEmail;
 	var newName = req.body.newName;
 	const today = new Date();
 	const todayDate = today.getDate();
 	const todayMonth = today.getMonth();
-
-	collectionWaffle.updateMany( { email: userEmail, submitmonth: todayMonth, submitdate: todayDate },
+console.log(userId);
+	collectionWaffle.updateOne( { _id: ObjectId(userId), submitmonth: todayMonth, submitdate: todayDate },
 		{
 			$set: { name: newName, email: newEmail }
 		}
@@ -185,3 +219,6 @@ app.post('/edit', async (req, res) => {
 	res.send(true);	
 });
 
+app.get('/test', (req, res) => {
+	res.render('test');
+});
