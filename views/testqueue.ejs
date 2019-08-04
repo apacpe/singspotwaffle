@@ -118,17 +118,25 @@
       submitted.setMinutes(submitted.getMinutes() + 5);
       var collectionTime = submitted.getHours() + ":" + submitted.getMinutes() + ":" + submitted.getSeconds();
 
-      var diff = submitted - now;
-      var minutes = Math.floor((diff % 3.6e5) / 6e4);
-      var seconds = Math.floor((diff % 6e4) / 1000);
+      var x = setInterval(function() {
 
-      if (minutes < 0) {
-        $(this).text('Your waffle should be ready!');
-      } else {
-        $(this).text(minutes + " minutes " + seconds + " seconds");
-      }
+        var distance = submitted - now;
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        $(".waitingtime").text(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
+
+        if (distance < 0) {
+          clearInterval(x);
+          $(".waitingtime").text("Your waffle is ready!");
+        }
+      }, 1000);
 
     });
+
+
 
   </script>
 

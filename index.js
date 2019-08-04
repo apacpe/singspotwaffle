@@ -73,7 +73,7 @@ app.get('/queue', (req, res) => {
 	
 	collectionWaffle.find( { submitdate: todayDate, submitmonth: todayMonth, waffleCollected: {$exists: false} }).sort({submitstamp: 1}).toArray((err, result) => {
 			console.log(result);
-			res.render('queue', {submission: result});
+			res.render('testqueue', {submission: result});
 		});
 })
 
