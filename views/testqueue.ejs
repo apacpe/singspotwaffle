@@ -87,12 +87,14 @@
                           <td style="display:none;" class="second"> <!-- getseconds-->
                             <%= submission[i].submitsecond %>
                           </td>
+                          <td class="test">
+                          </td>
                       </tr>
 
                     <% } %>
                 </table>
           <% } else { %>
-            <p>No one is in the queue!</p>
+            <p style="text-align: center; margin-top: 5%;">No one is in the queue!</p>
           <% } %>
         </div>
       </div>
@@ -107,8 +109,8 @@
   <script src="/static/js/custom.js"></script>
   <script type="text/javascript">
 
-    $(".waitingtime").each(function() {
-      var now = new Date();
+$(".test").ready(function(){
+   var now = new Date();
       var submitted = new Date();
       var submithour = $(this).siblings('.hour').text().trim();
       var submitminute = $(this).siblings('.minute').text().trim();
@@ -118,6 +120,7 @@
       submitted.setMinutes(submitted.getMinutes() + 5);
       var collectionTime = submitted.getHours() + ":" + submitted.getMinutes() + ":" + submitted.getSeconds();
 
+
       var x = setInterval(function() {
 
         var distance = submitted - now;
@@ -126,17 +129,14 @@
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        $(".waitingtime").text(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
+        $(".test").text(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
 
         if (distance < 0) {
           clearInterval(x);
-          $(".waitingtime").text("Your waffle is ready!");
+          $(".test").text("Your waffle is ready!");
         }
       }, 1000);
-
     });
-
-
 
   </script>
 

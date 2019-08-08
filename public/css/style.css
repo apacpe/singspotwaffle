@@ -112,7 +112,7 @@ table {
 .msg-row {
     /* margin-top: 56px; */
     padding-top: 30px;
-    max-width: 600px;
+    max-width: 300px;
     margin: 0 auto;
 }
 .media-body, .media-left, .media-right {
@@ -123,6 +123,12 @@ table {
     width: 70px;
     height: 70px;
     border-radius: 50%;
+}
+
+.waitingcontainer {
+    border: 1px solid goldenrod;
+    margin-top: 3rem;
+    width: 600px;
 }
 .contact-icon {
     color: #fff;
@@ -334,11 +340,30 @@ table {
 #Container .mix{
     display: none;
 }
+
+.queuelist {
+    display: flex;
+    justify-content: center;
+}
+
+.queue-email {
+    padding-right: 10px;
+    font-family: Montserrat,arial;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #FFB03B;
+}
+
+.waitingtime {
+    padding-left: 10px;
+}
+
 .menu-restaurant{
     width: 50%;
-    float: left;
+    /*float: left;*/
     padding: 15px;
     position: relative;
+    margin: 0 auto;
 }
 .menu-restaurant .menu-title {
     float: left;

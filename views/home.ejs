@@ -32,7 +32,7 @@
           <div class="inner text-center">
             <h1 class="logo-name">SingSpot Waffle Wednesday</h1>
             <h2>Today's waffle flavour:</h2>
-            <p>Chendol</p>
+            <p><% if (submission!='') { %><%= submission[0].flavour %><% } %></p>
           </div>
         </div>
       </div>
@@ -52,12 +52,7 @@
 
         <div class="col-md-12 col-sm-12">
           <form action="/submit" method="post" role="form" class="contactForm">
-            <div class="col-md-6 col-sm-6 contact-form pad-form">
-              <div class="form-group label-floating is-empty">
-                <input type='text' name='name' class="form-control" placeholder="Your name" required>
-              </div>
-            </div>
-            <div class="col-md-6 col-sm-6 contact-form pad-form">
+            <div class="col-md-12 col-sm-12 contact-form pad-form">
               <div class="form-group">
                 <input type='text' name='email' class="form-control label-floating is-empty" placeholder="Your HubSpot email" required>
               </div>
@@ -79,7 +74,7 @@
       <div class="row">
         <div class="col-md-offset-3 col-md-6 text-center">
           <div class="widget">
-            <h4 class="widget-title">Made by Nelson</h4>
+            <h4 class="widget-title">Waffles by Nelson</h4>
           </div>
         </div>
       </div>
