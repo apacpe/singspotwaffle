@@ -128,8 +128,33 @@ table {
 .waitingcontainer {
     border: 1px solid goldenrod;
     margin-top: 3rem;
+}
+
+@media (max-width: 767px) {
+.waitingcontainer {
+    margin-left: 3rem;
+    margin-right: 3rem;
+}
+}
+
+@media (min-width: 768px) {
+.waitingcontainer {
+    width: 400px;
+}
+}
+
+@media (min-width: 992px) {
+.waitingcontainer {
+    width: 500px;
+}
+}
+
+@media (min-width: 1200px) {
+.waitingcontainer {
     width: 600px;
 }
+}
+
 .contact-icon {
     color: #fff;
     position: absolute;
