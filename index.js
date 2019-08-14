@@ -162,7 +162,7 @@ app.post('/slack', async (req, res) => {
 		try {
 			var options = {
 				method: 'POST',
-				uri: 'https://hooks.slack.com/services/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',
+				uri: 'https://hooks.slack.com/services/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', 
 				json: true,
 				body: {
 					"text": "Hi <@" + slackUserId.user.id + "> your waffle is ready!"
@@ -182,6 +182,28 @@ app.post('/slack', async (req, res) => {
 	};
 
 	const sendSlack = await slackMsg();
+
+	const slackInvite = async() => {
+		try {
+			var options = {
+				method: 'POST',
+				uri: 'https://slack.com/api/channels.invite?token=' + token + '&channel=CLYVCDK6C&user=' + slackUserId.user.id,
+				json: true
+			};
+			request(options, (err, res, body) => {
+				if (err) {
+					console.error('error adding user to channel', err)
+					throw err
+				}
+				console.log('body:', body);
+				return body;
+			});
+		} catch(e) {
+			return {msg: e.message}
+		}
+	};
+
+	const sendInvite = await slackInvite();
 
 	const today = new Date();
 	const todayDate = today.getDate();
