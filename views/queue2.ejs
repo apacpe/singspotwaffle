@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Waffle order queue</title>
+
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Satisfy|Bree+Serif|Candal|PT+Sans">
+  <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+
+  <style>
+    #header {
+      background-color: #FFB03B;
+    }
+    .menu-icon {
+      margin-top:0px;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    tr {
+      background-color: #f0f0f0;
+      border-bottom: 1px dotted grey;
+    }
+    th {
+      color: white;
+      padding-left: 10px;
+    }
+    td {
+      padding: 10px;
+    }
+    .heading {
+      background-color: darkgrey;
+      border:none;
+    }
+  </style>
+</head>
+
+<body>
+  <!--banner-->
+
+
+      <header id="header">
+        <div class="container">
+          <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="/">Home</a>
+          </div>
+          <!-- Use any element to open the sidenav -->
+          <span onclick="openNav()" class="pull-right menu-icon">☰</span>
+        </div>
+      </header>
+      <div class="container waitingcontainer">
+        <div class="row">
+          <div class="col-md-12 text-center marb-35" style="float: none;">
+            <h1 class="header-h">Waiting List</h1>
+          </div>
+
+
+          <% if (submission!='') { %>
+            <% for (var i=0; i<submission.length; i++) { %>
+              <div class="queuelist">
+                <p class="queue-email"><%= submission[i].email %></p>
+              </div>
+            <% } %>
+
+      <!--          <table class="formresults" align="center">
+                    <tr class="heading">
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Ordered at</th>
+                      <th>Estimated waiting time</th>
+                    </tr>
+                    <% for (var i=0; i<submission.length; i++) { %>
+                      <tr class=<% if (submission[i].slackSent!='') { %><%= submission[i].slackSent %><% } %>>
+                          <td>
+                              <%= submission[i].name %>
+                          </td>
+                          <td class="useremail">
+                              <%= submission[i].email %>
+                          </td>
+                          <td>
+                              <%= submission[i].submitdate %> <%= submission[i].submitmonthname %> <%= submission[i].submithour %>Hour <%= submission[i].submitminute %>Min
+                          </td>
+                          <td class="waitingtime">
+                          </td> 
+                          <td style="display:none;" class="hour">  
+                           <%= submission[i].submithour %>
+                          </td>
+                          <td style="display:none;" class="minute">  
+                            <%= submission[i].submitminute %>
+                          </td>
+                          <td style="display:none;" class="second"> 
+                            <%= submission[i].submitsecond %>
+                          </td>
+                      </tr>
+
+                    <% } %>
+                </table>  -->
+          <% } else { %>
+            <p style="text-align: center; margin-top: 2rem;">No one is in the queue!</p>
+          <% } %>
+        </div>
+      </div>
+
+
+  <!-- / banner -->
+
+
+  <script src="/static/js/jquery.min.js"></script>
+  <script src="/static/js/jquery.easing.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/custom.js"></script>
+
+</body>
+
+</html>

@@ -71,7 +71,7 @@ app.post('/submit', (req, res) => {
 
 	collectionWaffle.insertOne({ email: req.body.email, submitstamp: submitStamp, submitmonthname: submitMonthName, submitdate: submitDate, submitmonth: submitMonth, submithour: submitHour, submitminute: submitMinute, submitsecond: submitSecond, cookie: req.sessionID }, (err, result) => {
 		console.log('saved waffle form submission');
-		res.redirect('/queue');
+		res.redirect('/queue2');
 	});  
 })
 
@@ -82,7 +82,7 @@ app.get('/queue', (req, res) => {
 	
 	collectionWaffle.find( { submitdate: todayDate, submitmonth: todayMonth, waffleCollected: {$exists: false} }).sort({submitstamp: 1}).toArray((err, result) => {
 			console.log(result);
-			res.render('queue', {submission: result});
+			res.render('queue2', {submission: result});
 		});
 })
 
