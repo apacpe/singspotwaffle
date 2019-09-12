@@ -71,7 +71,7 @@ app.post('/submit', (req, res) => {
 
 	collectionWaffle.insertOne({ email: req.body.email, submitstamp: submitStamp, submitmonthname: submitMonthName, submitdate: submitDate, submitmonth: submitMonth, submithour: submitHour, submitminute: submitMinute, submitsecond: submitSecond, cookie: req.sessionID }, (err, result) => {
 		console.log('saved waffle form submission');
-		res.redirect('/queue2');
+		res.redirect('/queue');
 	});  
 })
 
