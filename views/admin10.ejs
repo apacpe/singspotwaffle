@@ -45,14 +45,14 @@
       </div>
 
       <!-- Nav Item - Flavours -->
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="/flavours">
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Flavours</span></a>
       </li>
 
       <!-- Nav Item - Admin level 10 -->
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link" href="/admin10">
           <i class="fas fa-fw fa-table"></i>
           <span>Orders - Level 10</span></a>
@@ -121,8 +121,6 @@
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Administrator</span>
                 <img class="img-profile rounded-circle" src="/static/img/waffle2.jpg">
               </a>
-              <!-- Dropdown - User Information -->
-
             </li>
 
           </ul>
@@ -134,32 +132,32 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Waffle Flavours</h1>
-          <p class="mb-4">Update the waffle flavour for the day!</p>
-
-          <div class="card shadow mb-4">
-            <div class="card-header py-waffles">
-              <h6 class="m-0 font-weight-bold text-primary-waffles">Latest waffle flavour: <% if (submission!='') { %><%= submission[0].flavour %><% } %></h6>
-            </div>
-          </div>
+          <h1 class="h3 mb-2 text-gray-800">Waffle Orders for Level 10</h1>
+          <p class="mb-4">Orders for the day will appear in the table below in chronological order. Click 'Send Slack' to inform the HubSpotter that their waffle is ready. A green row would indicate a slack had been sent for that HubSpotter. Check the checkbox to indicate that the HubSpotter had collected the waffle.</p>
 
           <!-- Form -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">What is today's waffle flavour?</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Add someone to the queue</h6>
             </div>
-            <form action="/flavour" method="post" class="user">
+            <form action="/submitadmin10" method="post" class="user">
               <div class="form-group2">
-                <input type='text' name='flavour' placeholder='Waffle flavour' class="form-control2 form-control-user2" required>
+                <input type='text' name='email' placeholder='HubSpot email' class="form-control2 form-control-user2" required>
+                <select name="level" class="form-control2 form-control-user2 leveladmin" required>
+                  <option disabled selected value>Collection level</option>
+                  <option value="l10">Level 10</option>
+                  <option value="l19">Level 19</option>
+                </select> 
                 <input type="submit" name="submit" class="btn btn-primary btn-user2" value="Submit">
               </div>
             </form>
           </div>
 
-          <!-- Waffle flavours history table -->
+
+          <!-- Order queue table -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Past waffle flavours</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Order queue</h6>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -167,30 +165,51 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>Date</th>
-                      <th>Flavour</th>
+                      <th>Submision timestamp</th>
+                      <th>Email</th>
+                      <th>Send slack</th>
+                      <th>Collected</th>
+                      <th>Edit</th>
                     </tr>
                   </thead>
                   <tbody>
                     <% for (var i=0; i<submission.length; i++) { %>
-                    <tr>
+                    <tr class=<% if (submission[i].slackSent!='') { %><%= submission[i].slackSent %><% } %>>
                       <td>
-                          <%= submission[i].submitdate %> <%= submission[i].submitmonthname %> <%= submission[i].submityear %>
+                          <%= submission[i].submitstamp %>
+                      </td>
+                      <td class="useremail">
+                          <%= submission[i].email %>
                       </td>
                       <td>
-                          <%= submission[i].flavour %>
+                        <button name="slack" id=<%= submission[i]._id %>>Send slack!</button>
                       </td>
+                      <td>
+                        <input type="checkbox" name="collected" id=<%= submission[i]._id %> <% if (submission[i].waffleCollected!='') { %><%= submission[i].waffleCollected %><% } %>>
+                      </td>
+                      <td>
+                        <a href="#<%= submission[i]._id %>" rel="modal:open" id=<%= submission[i].email %>>Edit</a>
+                      </td> 
                     </tr>
+                    <div id=<%= submission[i]._id %> class="modal" style="height: auto; overflow: visible;">
+                      <div>
+                        <p>Edit the submission:</p>
+                        <input type='text' name='editemail' required value=<%= submission[i].email %>>
+                        <button name="edit" id=<%= submission[i]._id %>>Save</button>
+                      </div>
+                      <br>
+                      <a href="#" rel="modal:close">Close</a>
+                    </div>
                     <% } %>
+
                   </tbody>
                 </table>
                 <% } else { %>
-                  <p>No flavours submitted before!</p>
+                  <p>No submissions today yet</p>
                 <% } %>
               </div>
             </div>
           </div>
- 
 
         </div>
         <!-- /.container-fluid -->
@@ -247,7 +266,7 @@
 
   <!-- Custom scripts for all pages-->
   <script src="/static/js/sb-admin-2.min.js"></script>
-  <script src="/static/js/orderslackcollection.js"></script>
+  <script src="/static/js/orderslackcollection-l10.js"></script>
 
   <!-- Page level plugins -->
   <script src="/static/vendor/datatables/jquery.dataTables.min.js"></script>

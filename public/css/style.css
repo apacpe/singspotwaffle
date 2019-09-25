@@ -128,6 +128,7 @@ table {
 .waitingcontainer {
     border: 1px solid goldenrod;
     margin-top: 3rem;
+    margin-bottom: 3rem;
 }
 
 @media (max-width: 767px) {
@@ -196,7 +197,7 @@ table {
     padding-bottom: 10px;
 }
 .contact-form .form-control {
-    color: #000 !important;
+    color: #000;
     font-size: 16px;
     font-weight: normal;
     height: 38px;
@@ -255,6 +256,11 @@ table {
     margin: 0 0 20px;
     font-weight:400;
     font-size:13px;
+}
+
+.leveloption {
+    margin-bottom: 2rem;
+    color: #9699a6!important;
 }
 
 #sendmessage {

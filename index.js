@@ -69,7 +69,7 @@ app.post('/submit', (req, res) => {
 
 	var submitMonthName = monthNames[submitMonth];
 
-	collectionWaffle.insertOne({ email: req.body.email, submitstamp: submitStamp, submitmonthname: submitMonthName, submitdate: submitDate, submitmonth: submitMonth, submithour: submitHour, submitminute: submitMinute, submitsecond: submitSecond, cookie: req.sessionID }, (err, result) => {
+	collectionWaffle.insertOne({ email: req.body.email, level: req.body.level, submitstamp: submitStamp, submitmonthname: submitMonthName, submitdate: submitDate, submitmonth: submitMonth, submithour: submitHour, submitminute: submitMinute, submitsecond: submitSecond, cookie: req.sessionID }, (err, result) => {
 		console.log('saved waffle form submission');
 		res.redirect('/queue');
 	});  
@@ -101,9 +101,30 @@ app.post('/submitadmin', (req, res) => {
 
 	var submitMonthName = monthNames[submitMonth];
 
-	collectionWaffle.insertOne({ email: req.body.email, submitstamp: submitStamp, submitmonthname: submitMonthName, submitdate: submitDate, submitmonth: submitMonth, submithour: submitHour, submitminute: submitMinute, submitsecond: submitSecond, cookie: req.sessionID }, (err, result) => {
+	collectionWaffle.insertOne({ email: req.body.email, level: req.body.level, submitstamp: submitStamp, submitmonthname: submitMonthName, submitdate: submitDate, submitmonth: submitMonth, submithour: submitHour, submitminute: submitMinute, submitsecond: submitSecond, cookie: req.sessionID }, (err, result) => {
 		console.log('saved waffle form submission');
 		res.redirect('/admin');
+	});   
+})
+
+app.post('/submitadmin10', (req, res) => {
+	req.body.created_at = new Date();
+	var submitStamp = req.body.created_at;
+	var submitDate = submitStamp.getDate();
+	var submitMonth = submitStamp.getMonth();
+	var submitHour = submitStamp.getHours();
+	var submitMinute = submitStamp.getMinutes();
+	var submitSecond = submitStamp.getSeconds();
+
+	const monthNames = ["January", "February", "March", "April", "May", "June",
+	  "July", "August", "September", "October", "November", "December"
+	];
+
+	var submitMonthName = monthNames[submitMonth];
+
+	collectionWaffle.insertOne({ email: req.body.email, level: req.body.level, submitstamp: submitStamp, submitmonthname: submitMonthName, submitdate: submitDate, submitmonth: submitMonth, submithour: submitHour, submitminute: submitMinute, submitsecond: submitSecond, cookie: req.sessionID }, (err, result) => {
+		console.log('saved waffle form submission');
+		res.redirect('/admin10');
 	});   
 })
 
@@ -130,9 +151,25 @@ app.get('/admin', (req, res) => {
 		const todayDate = today.getDate();
 		const todayMonth = today.getMonth();
 
-		collectionWaffle.find( { submitdate: todayDate, submitmonth: todayMonth }).sort({submitstamp: 1}).toArray((err, result) => {
+		collectionWaffle.find( { submitdate: todayDate, submitmonth: todayMonth, level: "l19" }).sort({submitstamp: 1}).toArray((err, result) => {
 			console.log(result);
 			res.render('admin', {submission: result});
+		});
+	} else {
+		res.redirect('/login');
+	}
+
+})
+
+app.get('/admin10', (req, res) => {
+	if (cookieSession.includes(req.sessionID)) {
+		const today = new Date();
+		const todayDate = today.getDate();
+		const todayMonth = today.getMonth();
+
+		collectionWaffle.find( { submitdate: todayDate, submitmonth: todayMonth, level: "l10" }).sort({submitstamp: 1}).toArray((err, result) => {
+			console.log(result);
+			res.render('admin10', {submission: result});
 		});
 	} else {
 		res.redirect('/login');
@@ -187,7 +224,85 @@ app.post('/slack', async (req, res) => {
 				uri: 'https://hooks.slack.com/services/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', 
 				json: true,
 				body: {
-					"text": "Hi <@" + slackUserId.user.id + "> your waffle is ready!"
+					"text": "Hi <@" + slackUserId.user.id + "> your waffle is ready on level 19!"
+				}
+			};
+			request(options, (err, res, body) => {
+				if (err) {
+					console.error('error posting json', err)
+					throw err
+				}
+				console.log('body:', body);
+				return body;
+			});
+		} catch(e) {
+			return {msg: e.message}
+		}
+	};
+
+	const sendSlack = await slackMsg();
+
+	const today = new Date();
+	const todayDate = today.getDate();
+	const todayMonth = today.getMonth();
+
+	collectionWaffle.updateMany( { _id: ObjectId(userId), submitmonth: todayMonth, submitdate: todayDate },
+		{
+			$set: { slackSent: 'Yes' }
+		}
+	);
+
+	res.send(true);
+});
+
+app.post('/slack10', async (req, res) => {
+	console.log(req.body.email);
+	var userId = req.body.userid;
+	var userEmail = req.body.email;
+	var token = 'xoxp-2152023175-216767779619-713116306581-85259aec74488bafdd0f8a3419ddd05f';
+	var url = "https://slack.com/api/users.lookupByEmail?email=" + userEmail + "&token=" + token;
+
+	const slackUser = async() => {
+		try {
+			const data = await request.get(url, {json: true});
+			return data;
+		} catch (e) {
+			return {msg: e.message}
+		}
+	};
+
+	const slackUserId = await slackUser();
+
+	const slackInvite = async() => {
+		try {
+			var options = {
+				method: 'POST',
+				uri: 'https://slack.com/api/channels.invite?token=' + token + '&channel=CLYVCDK6C&user=' + slackUserId.user.id,
+				json: true
+			};
+			request(options, (err, res, body) => {
+				if (err) {
+					console.error('error adding user to channel', err)
+					throw err
+				}
+				console.log('body:', body);
+				return body;
+			});
+		} catch(e) {
+			return {msg: e.message}
+		}
+	};
+
+	const sendInvite = await slackInvite();
+
+	const slackMsg = async() => {
+		try {
+			var options = {
+				method: 'POST',
+				uri: 'https://hooks.slack.com/services/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', 
+				json: true,
+				body: {
+					"text": "Hi <@" + slackUserId.user.id + "> your waffle is ready on level 10!"
 				}
 			};
 			request(options, (err, res, body) => {

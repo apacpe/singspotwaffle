@@ -11739,7 +11739,7 @@ form.user .form-control-user {
 form.user .form-control-user2 {
   font-size: 0.8rem;
   border-radius: 10rem;
-  padding: 1.2rem 1rem;
+ /* padding: 1.2rem 1rem; */
 }
 
 form.user .btn-user {

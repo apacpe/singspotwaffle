@@ -54,7 +54,12 @@
           <form action="/submit" method="post" role="form" class="contactForm">
             <div class="col-md-12 col-sm-12 contact-form pad-form">
               <div class="form-group">
-                <input type='text' name='email' class="form-control label-floating is-empty" placeholder="Your HubSpot email" required>
+                <select name="level" class="form-control label-floating is-empty leveloption" required>
+                  <option disabled selected value>Select collection level</option>
+                  <option value="l10">Level 10</option>
+                  <option value="l19">Level 19</option>
+                </select> 
+                <input type='email' name='email' class="form-control label-floating is-empty" placeholder="Your HubSpot email" pattern=".+@hubspot.com" title="Please provide only a HubSpot email i.e. jlin@hubspot.com" required>
               </div>
             </div>
             <div class="col-md-12 btnpad">
