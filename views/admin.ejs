@@ -44,18 +44,25 @@
         Interface
       </div>
 
-      <!-- Nav Item - Charts -->
+      <!-- Nav Item - Flavours -->
       <li class="nav-item">
         <a class="nav-link" href="/flavours">
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Flavours</span></a>
       </li>
 
-      <!-- Nav Item - Tables -->
+      <!-- Nav Item - Admin level 10 -->
+      <li class="nav-item">
+        <a class="nav-link" href="/admin10">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Orders - Level 10</span></a>
+      </li>
+
+      <!-- Nav Item - Admin level 19 -->
       <li class="nav-item active">
         <a class="nav-link" href="/admin">
           <i class="fas fa-fw fa-table"></i>
-          <span>Orders</span></a>
+          <span>Orders - Level 19</span></a>
       </li>
 
       <!-- Divider -->
@@ -125,7 +132,7 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Waffle Orders</h1>
+          <h1 class="h3 mb-2 text-gray-800">Waffle Orders for Level 19</h1>
           <p class="mb-4">Orders for the day will appear in the table below in chronological order. Click 'Send Slack' to inform the HubSpotter that their waffle is ready. A green row would indicate a slack had been sent for that HubSpotter. Check the checkbox to indicate that the HubSpotter had collected the waffle.</p>
 
           <!-- Form -->
@@ -136,6 +143,11 @@
             <form action="/submitadmin" method="post" class="user">
               <div class="form-group2">
                 <input type='text' name='email' placeholder='HubSpot email' class="form-control2 form-control-user2" required>
+                <select name="level" class="form-control2 form-control-user2 leveladmin" required>
+                  <option disabled selected value>Collection level</option>
+                  <option value="l10">Level 10</option>
+                  <option value="l19">Level 19</option>
+                </select> 
                 <input type="submit" name="submit" class="btn btn-primary btn-user2" value="Submit">
               </div>
             </form>
@@ -182,7 +194,6 @@
                     <div id=<%= submission[i]._id %> class="modal" style="height: auto; overflow: visible;">
                       <div>
                         <p>Edit the submission:</p>
-                        <input type='text' name='editname' required value=<%= submission[i].name %>>
                         <input type='text' name='editemail' required value=<%= submission[i].email %>>
                         <button name="edit" id=<%= submission[i]._id %>>Save</button>
                       </div>
@@ -255,7 +266,7 @@
 
   <!-- Custom scripts for all pages-->
   <script src="/static/js/sb-admin-2.min.js"></script>
-  <script src="/static/js/orderslackcollection.js"></script>
+  <script src="/static/js/orderslackcollection-l19.js"></script>
 
   <!-- Page level plugins -->
   <script src="/static/vendor/datatables/jquery.dataTables.min.js"></script>
