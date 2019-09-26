@@ -52,62 +52,56 @@
             <a href="/">Home</a>
           </div>
           <!-- Use any element to open the sidenav -->
-          <span onclick="openNav()" class="pull-right menu-icon">☰</span>
+          <a href="/"><span class="pull-right menu-icon menu-icon-queue"><img src="/static/img/home-icon2.png" width="23px"> Home</span></a>
         </div>
       </header>
+      <div class="container">
+        <div class="col-md-5  text-center waitingcontainer">
+          <div class="row">
+            <div class="col-md-12 text-center marb-35" style="float: none;">
+              <h1 class="header-h">Level 10 Waiting List</h1>
+            </div>
 
-      <div class="container waitingcontainer">
-        <div class="row">
-          <div class="col-md-12 text-center marb-35" style="float: none;">
-            <h1 class="header-h">Waiting List</h1>
-          </div>
 
-
-          <% if (submission!='') { %>
-            <% for (var i=0; i<submission.length; i++) { %>
-              <div class="queuelist">
-                <p class="queue-email"><%= submission[i].email %></p>
-              </div>
+            <% if (submission!='') { %>
+              <% for (var i=0; i<submission.length; i++) { %>
+                <% if (submission[i].level == 'l10') { %>
+                  <div class="queuelist">
+                    <p class="queue-email"><%= submission[i].email %></p>
+                  </div>
+                <% } %>
+              <% } %>
+            <% } else { %>
+              <p style="text-align: center; margin-top: 2rem;">No one is in the queue!</p>
             <% } %>
+          </div>
+        </div>
 
-      <!--          <table class="formresults" align="center">
-                    <tr class="heading">
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Ordered at</th>
-                      <th>Estimated waiting time</th>
-                    </tr>
-                    <% for (var i=0; i<submission.length; i++) { %>
-                      <tr class=<% if (submission[i].slackSent!='') { %><%= submission[i].slackSent %><% } %>>
-                          <td>
-                              <%= submission[i].name %>
-                          </td>
-                          <td class="useremail">
-                              <%= submission[i].email %>
-                          </td>
-                          <td>
-                              <%= submission[i].submitdate %> <%= submission[i].submitmonthname %> <%= submission[i].submithour %>Hour <%= submission[i].submitminute %>Min
-                          </td>
-                          <td class="waitingtime">
-                          </td> 
-                          <td style="display:none;" class="hour">  
-                           <%= submission[i].submithour %>
-                          </td>
-                          <td style="display:none;" class="minute">  
-                            <%= submission[i].submitminute %>
-                          </td>
-                          <td style="display:none;" class="second"> 
-                            <%= submission[i].submitsecond %>
-                          </td>
-                      </tr>
+        <div class="col-md-2 text-center">
+        </div>
 
-                    <% } %>
-                </table>  -->
-          <% } else { %>
-            <p style="text-align: center; margin-top: 2rem;">No one is in the queue!</p>
-          <% } %>
+        <div class="col-md-5  text-center waitingcontainer">
+          <div class="row">
+            <div class="col-md-12 text-center marb-35" style="float: none;">
+              <h1 class="header-h">Level 19 Waiting List</h1>
+            </div>
+
+
+            <% if (submission!='') { %>
+              <% for (var i=0; i<submission.length; i++) { %>
+                <% if (submission[i].level == 'l19') { %>
+                  <div class="queuelist">
+                    <p class="queue-email"><%= submission[i].email %></p>
+                  </div>
+                <% } %>
+              <% } %>
+            <% } else { %>
+              <p style="text-align: center; margin-top: 2rem;">No one is in the queue!</p>
+            <% } %>
+          </div>
         </div>
       </div>
+
 
 
   <!-- / banner -->

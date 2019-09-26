@@ -97,6 +97,23 @@ table {
     font-size: 30px;
     margin-top: 30px;
     cursor: pointer;
+    font-family: 'Satisfy', sans-serif;
+}
+
+.menu-icon:hover {
+    color: goldenrod;
+}
+
+.menu-icon img {
+    filter: invert(1);
+}
+
+.menu-icon-queue img {
+    padding-bottom: 5px;
+}
+
+.menu-icon-queue:hover {
+    color: gray;
 }
 
 .header-h {
@@ -138,7 +155,7 @@ table {
 }
 }
 
-@media (min-width: 768px) {
+/* @media (min-width: 768px) { 
 .waitingcontainer {
     width: 400px;
 }
@@ -154,7 +171,7 @@ table {
 .waitingcontainer {
     width: 600px;
 }
-}
+} */
 
 .contact-icon {
     color: #fff;
