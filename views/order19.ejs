@@ -149,7 +149,6 @@
                   <option value="l19">Level 19</option>
                 </select> 
                 <input type="submit" name="submit" class="btn btn-primary btn-user2" value="Submit">
-                <button type="button" name="cansubmitliao" value="cansubmitliao">Can submit liao</button>
               </div>
             </form>
           </div>
@@ -171,6 +170,7 @@
                       <th>Send slack</th>
                       <th>Collected</th>
                       <th>Edit</th>
+                      <th>Delete</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -191,6 +191,9 @@
                       <td>
                         <a href="#<%= submission[i]._id %>" rel="modal:open" id=<%= submission[i].email %>>Edit</a>
                       </td> 
+                      <td>
+                        <a href="#<%= submission[i]._id %>2" rel="modal:open" id=<%= submission[i].email %>>Delete</a>
+                      </td> 
                     </tr>
                     <div id=<%= submission[i]._id %> class="modal" style="height: auto; overflow: visible;">
                       <div>
@@ -200,6 +203,13 @@
                       </div>
                       <br>
                       <a href="#" rel="modal:close">Close</a>
+                    </div>
+                    <div id="<%= submission[i]._id %>2" class="modal" style="height: auto; overflow: visible;">
+                      <div style="text-align:center;">
+                        <p>Are you sure you want to delete the submission?</p>
+                        <button name="delete" id=<%= submission[i]._id %>>Yes</button>
+                        <a href="#" rel="modal:close">Cancel</a>
+                      </div>
                     </div>
                     <% } %>
 

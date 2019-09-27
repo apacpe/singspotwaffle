@@ -51,7 +51,6 @@ app.get('/', (req, res) => {
 		const todayYear = today.getFullYear();
 
 		collectionFlavour.find( { submitdate: todayDate, submitmonth: todayMonth, submityear: todayYear }).sort({submitstamp: -1}).toArray((err, result) => {
-			console.log(result);
 			res.render('home', {submission: result});
 		});
 	} else {
@@ -61,7 +60,6 @@ app.get('/', (req, res) => {
 		const todayYear = today.getFullYear();
 
 		collectionFlavour.find( { submitdate: todayDate, submitmonth: todayMonth, submityear: todayYear }).sort({submitstamp: -1}).toArray((err, result) => {
-			console.log(result);
 			res.render('homenoform', {submission: result});
 		});
 	}
@@ -94,7 +92,6 @@ app.get('/queue', (req, res) => {
 	const todayMonth = today.getMonth();
 	
 	collectionWaffle.find( { submitdate: todayDate, submitmonth: todayMonth, waffleCollected: {$exists: false} }).sort({submitstamp: 1}).toArray((err, result) => {
-			console.log(result);
 			res.render('queue2', {submission: result});
 		});
 })
@@ -165,7 +162,6 @@ app.get('/order19', (req, res) => {
 		const todayMonth = today.getMonth();
 
 		collectionWaffle.find( { submitdate: todayDate, submitmonth: todayMonth, level: "l19" }).sort({submitstamp: 1}).toArray((err, result) => {
-			console.log(result);
 			res.render('order19', {submission: result});
 		});
 	} else {
@@ -181,7 +177,6 @@ app.get('/order10', (req, res) => {
 		const todayMonth = today.getMonth();
 
 		collectionWaffle.find( { submitdate: todayDate, submitmonth: todayMonth, level: "l10" }).sort({submitstamp: 1}).toArray((err, result) => {
-			console.log(result);
 			res.render('order10', {submission: result});
 		});
 	} else {
@@ -377,6 +372,33 @@ app.post('/edit', async (req, res) => {
 	res.send(true);	
 });
 
+app.post('/editflavour', async (req, res) => {
+	var flavourId = req.body.flavourId;
+	var newFlavour = req.body.newFlavour;
+
+	collectionFlavour.updateOne( { _id: ObjectId(flavourId) },
+		{
+			$set: { flavour: newFlavour }
+		}
+	);
+
+	res.send(true);	
+});
+
+app.post('/delete', async (req, res) => {
+	var userId = req.body.userid;
+	const today = new Date();
+	const todayDate = today.getDate();
+	const todayMonth = today.getMonth();
+
+	collectionWaffle.deleteOne( { _id: ObjectId(userId), submitmonth: todayMonth, submitdate: todayDate } );
+
+	res.send(true);	
+});
+
+
+
+
 app.get('/admin', (req, res) => {
 	if (cookieSession.includes(req.sessionID)) {
 		const today = new Date();
@@ -385,7 +407,6 @@ app.get('/admin', (req, res) => {
 		const todayYear = today.getFullYear();
 
 		collectionFlavour.find().sort({submitstamp: -1}).toArray((err, result) => {
-			console.log(result);
 			res.render('admin', {submission: result, formstatus: formisready});
 		});
 	} else {
@@ -423,11 +444,11 @@ app.post('/flavourform', async (req, res) => {
 
 	function hideForm() {
 		formisready = false;
-		console.log('Form is switched off now.');
+		console.log('Form is locked.');
 	}
 
 	formisready = true; 
-	console.log('Form is switched on now.');
+	console.log('Form is unlocked.');
 
 	const duration = 1000 * 60 * 60 * 5;
 	setTimeout(hideForm, duration);
@@ -449,3 +470,22 @@ app.post('/flavourform', async (req, res) => {
 	});  
 })
 
+app.post('/lockform', (req, res) => {
+	formisready = false; 
+	console.log('Form is locked manually.');
+	res.send(true);
+})
+
+app.post('/unlockform', (req, res) => {
+	function hideForm() {
+		formisready = false;
+		console.log('Form is locked.');
+	}
+
+	formisready = true; 
+	console.log('Form is unlocked manually.');
+
+	const duration = 1000 * 60 * 60 * 5;
+	setTimeout(hideForm, duration);
+	res.send(true);
+})

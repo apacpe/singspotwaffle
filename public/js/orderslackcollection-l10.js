@@ -39,7 +39,6 @@ $("input[name='collected']").click(function(){
 $("button[name='edit']").click(function(){
 
 var userId = $(this).attr("id"); 
-var editName = $(this).siblings("input[name='editname']").val();
 var editEmail = $(this).siblings("input[name='editemail']").val();
 var active = $(this);
 
@@ -47,11 +46,32 @@ var active = $(this);
 		context: active,
 		type: "POST",
 		url: "/edit", 
-		data: JSON.stringify({ userid: userId, newEmail: editEmail, newName: editName }),
+		data: JSON.stringify({ userid: userId, newEmail: editEmail }),
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "json",
 		success: function(result){
     		active.parent().html('Changes saved!');
+    		setTimeout(location.reload.bind(location), 800);
+  		}
+  	});
+
+
+});
+
+$("button[name='delete']").click(function(){
+
+var userId = $(this).attr("id"); 
+var active = $(this);
+
+	$.ajax({
+		context: active,
+		type: "POST",
+		url: "/delete", 
+		data: JSON.stringify({ userid: userId }),
+	    contentType: "application/json; charset=utf-8",
+	    dataType: "json",
+		success: function(result){
+    		active.parent().html('Deleted!');
     		setTimeout(location.reload.bind(location), 800);
   		}
   	});

@@ -135,19 +135,18 @@
 
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Waffle Admin Home</h1>
-          <p class="mb-4">In this page, you can update the waffle flavour for the day and switch the form on to allow people to start ordering!</p>
+          <p class="mb-4">Submit the form below to simultaneously update the waffle flavour for the day and unlock the order form to allow people to start ordering! The form submission will automatically send a slack message to #singspotwaffles.</p>
 
           <div class="card shadow mb-4">
             <div class="card-header py-waffles">
-              <h6 class="font-weight-bold text-primary-form">Form is currently: <% if (formstatus == false) { %>Locked<% } else { %>Unlocked<% } %></h6>
-              <h6 class="m-0 font-weight-bold text-primary-waffles">Latest waffle flavour: <% if (submission!='') { %><%= submission[0].flavour %><% } %></h6>
+              <h6 class="font-weight-bold text-primary-form">Order form is currently: <% if (formstatus == false) { %>Locked<% } else { %>Unlocked<% } %></h6>
             </div>
           </div>
 
           <!-- Form -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Submit waffle flavour and enable the order form</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Submit waffle flavour and unlock the order form</h6>
             </div>
             <form action="/flavourform" method="post" class="user">
               <div class="form-group2">
@@ -160,7 +159,7 @@
                   <textarea rows="3" cols="48" name="slackmsg" class="form-control3 form-control-user2" required>
 <!here> You can start ordering waffles now!
 Order link: https://singspotwaffles.herokuapp.com/ 
-Waffle flavour: ___</textarea>
+Waffle flavour: </textarea>
                 </div>
                 <div class="form-group3">
                   <input type="submit" name="submit" class="btn btn-primary btn-user2" value="Submit">
@@ -172,13 +171,14 @@ Waffle flavour: ___</textarea>
           <!-- Disable form -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary disableForm">Form is currently: <% if (formstatus == false) { %>Locked<% } else { %>Unlocked<% } %></h6>
+              <h6 class="m-0 font-weight-bold text-primary disableForm">Lock or unlock the order form manually</h6>
 
               <% if (formstatus == false) { %>
-              <button type="button" name="disableForm" class="btn-primary2 btn-user2 disableFormbtn">Unlock form</button><% } else { %>
-              <button type="button" name="disableForm" class="btn-primary2 btn-user2 disableFormbtn">Lock form</button>
+              <button type="button" name="unlockform" class="btn-primary2 btn-user2 disableFormbtn">Unlock form</button>
+              <% } else { %>
+              <button type="button" name="lockform" class="btn-primary2 btn-user2 disableFormbtn">Lock form</button>
               <% } %>
-              
+              <p class="orderformdesc">E.g. lock the form when waffles are out</p>
             </div>
           </div>
 
@@ -195,6 +195,7 @@ Waffle flavour: ___</textarea>
                     <tr>
                       <th>Date</th>
                       <th>Flavour</th>
+                      <th>Edit</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -206,7 +207,19 @@ Waffle flavour: ___</textarea>
                       <td>
                           <%= submission[i].flavour %>
                       </td>
+                      <td>
+                        <a href="#<%= submission[i]._id %>" rel="modal:open" id=<%= submission[i]._id %>>Edit</a>
+                      </td> 
                     </tr>
+                    <div id=<%= submission[i]._id %> class="modal" style="height: auto; overflow: visible;">
+                      <div>
+                        <p>Edit the flavour:</p>
+                        <input type='text' name='editflavour' size="35" required value="<%= submission[i].flavour %>">
+                        <button name="editflavour" id=<%= submission[i]._id %>>Save</button>
+                      </div>
+                      <br>
+                      <a href="#" rel="modal:close">Close</a>
+                    </div>
                     <% } %>
                   </tbody>
                 </table>
@@ -273,7 +286,7 @@ Waffle flavour: ___</textarea>
 
   <!-- Custom scripts for all pages-->
   <script src="/static/js/sb-admin-2.min.js"></script>
-  <script src="/static/js/orderslackcollection.js"></script>
+  <script src="/static/js/changeformstatus.js"></script>
 
   <!-- Page level plugins -->
   <script src="/static/vendor/datatables/jquery.dataTables.min.js"></script>

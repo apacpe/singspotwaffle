@@ -2080,7 +2080,7 @@ button[name="slack"]:hover {
 }
 
 .form-control3 {
-  height: 91px;
+  height: 98px;
   padding: 0.375rem 0.75rem;
   font-size: 1rem;
   font-weight: 400;
@@ -2097,6 +2097,11 @@ button[name="slack"]:hover {
   margin-right: 2rem;
   margin-left: 0.5rem;
   padding: 1rem 1rem;
+}
+
+p.orderformdesc {
+    font-size: 0.8rem;
+    margin-bottom: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
