@@ -2079,6 +2079,26 @@ button[name="slack"]:hover {
   margin-left: 0.5rem;
 }
 
+.form-control3 {
+  height: 91px;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #6e707e;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #d1d3e2;
+  border-radius: 0.35rem;
+  -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+  transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+  margin-right: 2rem;
+  margin-left: 0.5rem;
+  padding: 1rem 1rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .form-control {
     -webkit-transition: none;
@@ -2213,6 +2233,13 @@ textarea.form-control {
   margin-bottom: 1rem;
   margin-top: 1rem;
   padding-left: 1rem;
+}
+
+.form-group3 {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
 }
 
 .form-text {
@@ -2620,6 +2647,32 @@ textarea.form-control {
   }
 }
 
+.disableForm {
+  display:inline;
+}
+
+.disableFormbtn {
+  font-size: 0.8rem;
+  border-radius: 10rem;
+  border: 1px solid transparent;
+  padding: 0.5rem 1rem;
+  display: inline-block;
+  font-weight: 400;
+  color: #858796;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: transparent;
+  line-height: 1.5;
+  -webkit-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+
 .btn {
   display: inline-block;
   font-weight: 400;
@@ -2649,6 +2702,11 @@ textarea.form-control {
   }
 }
 
+.disableFormbtn:hover {
+  background-color: #c42323;
+  text-decoration: none;
+}
+
 .btn:hover {
   color: #858796;
   text-decoration: none;
@@ -2673,6 +2731,12 @@ fieldset:disabled a.btn {
   color: #fff;
   background-color: #4e73df;
   border-color: #4e73df;
+}
+
+.btn-primary2 {
+  color: #fff;
+  background-color: #f52c2c;
+  border-color: #f52c2c;
 }
 
 .btn-primary:hover {
@@ -10443,6 +10507,12 @@ button.bg-dark:focus {
     color: goldenrod;
 }
 
+.text-primary-form {
+    font-size: 1.45em;
+    color: #ed3824;
+    text-align: center;
+}
+
 a.text-primary:hover, a.text-primary:focus {
   color: #224abe !important;
 }
@@ -11739,7 +11809,7 @@ form.user .form-control-user {
 form.user .form-control-user2 {
   font-size: 0.8rem;
   border-radius: 10rem;
- /* padding: 1.2rem 1rem; */
+ /* padding: 1rem 1rem; */
 }
 
 form.user .btn-user {

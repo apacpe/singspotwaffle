@@ -99,20 +99,6 @@ app.get('/queue', (req, res) => {
 		});
 })
 
-app.post('/cansubmitliao', (req, res) => {
-	function hideForm() {
-		formisready = false;
-		console.log('Form is switched off now.');
-	}
-
-	formisready = true; 
-	console.log('Form is switched on now.');
-	res.send(true);
-
-	const duration = 1000 * 60 * 60 * 5;
-	setTimeout(hideForm, duration);
-})
-
 app.post('/submitadmin', (req, res) => {
 	req.body.created_at = new Date();
 	var submitStamp = req.body.created_at;
@@ -130,7 +116,7 @@ app.post('/submitadmin', (req, res) => {
 
 	collectionWaffle.insertOne({ email: req.body.email, level: req.body.level, submitstamp: submitStamp, submitmonthname: submitMonthName, submitdate: submitDate, submitmonth: submitMonth, submithour: submitHour, submitminute: submitMinute, submitsecond: submitSecond, cookie: req.sessionID }, (err, result) => {
 		console.log('saved waffle form submission');
-		res.redirect('/admin');
+		res.redirect('/order19');
 	});   
 })
 
@@ -151,7 +137,7 @@ app.post('/submitadmin10', (req, res) => {
 
 	collectionWaffle.insertOne({ email: req.body.email, level: req.body.level, submitstamp: submitStamp, submitmonthname: submitMonthName, submitdate: submitDate, submitmonth: submitMonth, submithour: submitHour, submitminute: submitMinute, submitsecond: submitSecond, cookie: req.sessionID }, (err, result) => {
 		console.log('saved waffle form submission');
-		res.redirect('/admin10');
+		res.redirect('/order10');
 	});   
 })
 
@@ -208,7 +194,7 @@ app.post('/slack', async (req, res) => {
 	console.log(req.body.email);
 	var userId = req.body.userid;
 	var userEmail = req.body.email;
-	var token = 'xoxp-2152023175-216767779619-713116306581-85259aec74488bafdd0f8a3419ddd05f';
+	var token = 'xoxp-362346574368-364091480439-699939285443-3eb8f82a2e3bb7d7ab79d2b346da157b';
 	var url = "https://slack.com/api/users.lookupByEmail?email=" + userEmail + "&token=" + token;
 
 	const slackUser = async() => {
@@ -226,7 +212,7 @@ app.post('/slack', async (req, res) => {
 		try {
 			var options = {
 				method: 'POST',
-				uri: 'https://slack.com/api/channels.invite?token=' + token + '&channel=CLYVCDK6C&user=' + slackUserId.user.id,
+				uri: 'https://slack.com/api/channels.invite?token=' + token + '&channel=CLKT58S3U&user=' + slackUserId.user.id,
 				json: true
 			};
 			request(options, (err, res, body) => {
@@ -248,7 +234,7 @@ app.post('/slack', async (req, res) => {
 		try {
 			var options = {
 				method: 'POST',
-				uri: 'https://hooks.slack.com/services/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', 
+				uri: 'https://hooks.slack.com/services/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', 
 				json: true,
 				body: {
 					"text": "Hi <@" + slackUserId.user.id + "> your waffle is ready on level 19!"
@@ -286,7 +272,7 @@ app.post('/slack10', async (req, res) => {
 	console.log(req.body.email);
 	var userId = req.body.userid;
 	var userEmail = req.body.email;
-	var token = 'xoxp-2152023175-216767779619-713116306581-85259aec74488bafdd0f8a3419ddd05f';
+	var token = 'xoxp-362346574368-364091480439-699939285443-3eb8f82a2e3bb7d7ab79d2b346da157b';
 	var url = "https://slack.com/api/users.lookupByEmail?email=" + userEmail + "&token=" + token;
 
 	const slackUser = async() => {
@@ -304,7 +290,7 @@ app.post('/slack10', async (req, res) => {
 		try {
 			var options = {
 				method: 'POST',
-				uri: 'https://slack.com/api/channels.invite?token=' + token + '&channel=CLYVCDK6C&user=' + slackUserId.user.id,
+				uri: 'https://slack.com/api/channels.invite?token=' + token + '&channel=CLKT58S3U&user=' + slackUserId.user.id,
 				json: true
 			};
 			request(options, (err, res, body) => {
@@ -326,7 +312,7 @@ app.post('/slack10', async (req, res) => {
 		try {
 			var options = {
 				method: 'POST',
-				uri: 'https://hooks.slack.com/services/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', 
+				uri: 'https://hooks.slack.com/services/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', 
 				json: true,
 				body: {
 					"text": "Hi <@" + slackUserId.user.id + "> your waffle is ready on level 10!"
@@ -407,7 +393,45 @@ app.get('/admin', (req, res) => {
 	}
 });
 
-app.post('/flavour', (req, res) => {
+app.post('/flavourform', async (req, res) => {
+	var slackMessage = req.body.slackmsg;
+
+	const slackStartMsg = async() => {
+		try {
+			var options = {
+				method: 'POST',
+				uri: 'https://hooks.slack.com/services/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', 
+				json: true,
+				body: {
+					"text": slackMessage
+				}
+			};
+			request(options, (err, res, body) => {
+				if (err) {
+					console.error('error posting json', err)
+					throw err
+				}
+				console.log('body:', body);
+				return body;
+			});
+		} catch(e) {
+			return {msg: e.message}
+		}
+	};
+
+	const sendSlackStartMsg = await slackStartMsg();
+
+	function hideForm() {
+		formisready = false;
+		console.log('Form is switched off now.');
+	}
+
+	formisready = true; 
+	console.log('Form is switched on now.');
+
+	const duration = 1000 * 60 * 60 * 5;
+	setTimeout(hideForm, duration);
+
 	req.body.created_at = new Date();
 	var submitStamp = req.body.created_at;
 	var submitDate = submitStamp.getDate();
@@ -424,3 +448,4 @@ app.post('/flavour', (req, res) => {
 		res.redirect('/admin');
 	});  
 })
+

@@ -148,6 +148,10 @@ table {
     margin-bottom: 3rem;
 }
 
+.noformmsg {
+    text-align:center;
+}
+
 @media (max-width: 767px) {
 .waitingcontainer {
     margin-left: 3rem;
