@@ -189,7 +189,7 @@ app.post('/slack', async (req, res) => {
 	console.log(req.body.email);
 	var userId = req.body.userid;
 	var userEmail = req.body.email;
-	var token = 'xoxp-2152023175-216767779619-713116306581-85259aec74488bafdd0f8a3419ddd05f';
+	var token = 'xoxp-2152023175-216767779619-1805408688528-bd81e6db7bbbee7699b629cf8e10a919';
 	var url = "https://slack.com/api/users.lookupByEmail?email=" + userEmail + "&token=" + token;
 
 	const slackUser = async() => {
@@ -229,7 +229,7 @@ app.post('/slack', async (req, res) => {
 		try {
 			var options = {
 				method: 'POST',
-				uri: 'https://hooks.slack.com/services/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', 
+				uri: 'https://hooks.slack.com/services/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',
 				json: true,
 				body: {
 					"text": "Hi <@" + slackUserId.user.id + "> your waffle is ready on level 19!"
@@ -267,7 +267,7 @@ app.post('/slack10', async (req, res) => {
 	console.log(req.body.email);
 	var userId = req.body.userid;
 	var userEmail = req.body.email;
-	var token = 'xoxp-2152023175-216767779619-713116306581-85259aec74488bafdd0f8a3419ddd05f';
+	var token = 'xoxp-2152023175-216767779619-1805408688528-bd81e6db7bbbee7699b629cf8e10a919';
 	var url = "https://slack.com/api/users.lookupByEmail?email=" + userEmail + "&token=" + token;
 
 	const slackUser = async() => {
@@ -307,7 +307,7 @@ app.post('/slack10', async (req, res) => {
 		try {
 			var options = {
 				method: 'POST',
-				uri: 'https://hooks.slack.com/services/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', 
+				uri: 'https://hooks.slack.com/services/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', 
 				json: true,
 				body: {
 					"text": "Hi <@" + slackUserId.user.id + "> your waffle is ready on level 10!"
@@ -421,7 +421,7 @@ app.post('/flavourform', async (req, res) => {
 		try {
 			var options = {
 				method: 'POST',
-				uri: 'https://hooks.slack.com/services/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', 
+				uri: 'https://hooks.slack.com/services/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', 
 				json: true,
 				body: {
 					"text": slackMessage
