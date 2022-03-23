@@ -1,3 +1,5 @@
+// This duplicate app file is just for testing purposes!
+
 const express = require('express');
 const app = express();
 const session = require('express-session');
