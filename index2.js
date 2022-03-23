@@ -27,8 +27,8 @@ app.use(session({
   }
 }));
 
-const CONNECTION_URL = "mongodb+srv://jasUser:password6!@cluster0-z8jcr.mongodb.net/test?retryWrites=true&w=majority";
-const DATABASE_NAME = "waffletest"; // you can change the database name
+const CONNECTION_URL = "mongodb+srv://apacpe:apacpesupport@cluster0.lwey7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const DATABASE_NAME = "singspotwaffles"; // you can change the database name
 var database, collectionWaffle, collectionFlavour;
 
 MongoClient.connect(CONNECTION_URL, { useNewUrlParser: true }, (error, client) => {
