@@ -200,7 +200,7 @@ app.post('/slack', async (req, res) => {
 	console.log(req.body.email);
 	var userId = req.body.userid;
 	var userEmail = req.body.email;
-	var token = 'xoxp-2152023175-1917488309302-3436670124000-80e1071d72e50bce739dd9a2baa16cac';
+	var token = process.env.slack_token;
 	var url = "https://slack.com/api/users.lookupByEmail?email=" + userEmail + "&token=" + token;
 
 	const slackUser = async() => {
