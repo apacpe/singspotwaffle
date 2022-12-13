@@ -8,7 +8,7 @@ var cookieSession = require('cookie-session')
 
 app.use(cookieSession({
   name: 'session',
-  secret: 'env-secret',
+  secret: process.env.secret,
 
   // Cookie Options
   maxAge: 24 * 60 * 60 * 1000 // 24 hours
@@ -147,7 +147,7 @@ app.post('/submitadmin10', (req, res) => {
 
 app.get('/login', (req, res) => {
 	// if (cookieSession.includes(req.sessionID)) {
-	if (req.session.loginid != null && req.session.loginid == 'loginid' )	{
+	if (req.session.loginid != null && req.session.loginid == process.env.loginid )	{
 		res.redirect('/admin');
 	} else {
 		res.render('login');
@@ -157,7 +157,7 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
 	if (req.body.password == 'Waff1ef0rl1f3') {
 		// cookieSession.push(req.sessionID);
-		req.session.loginid = 'loginid'
+		req.session.loginid = process.env.loginid
 		res.redirect('/admin');
 	} else {
 		res.send("Sorry wrong password! Don't try again.");
@@ -165,7 +165,7 @@ app.post('/login', (req, res) => {
 })
 
 app.get('/order19', (req, res) => {
-	if (req.session.loginid != null && req.session.loginid == 'loginid' ) {
+	if (req.session.loginid != null && req.session.loginid == process.env.loginid )	{
 	// if (cookieSession.includes(req.sessionID)) 
 		const today = new Date();
 		const todayDate = today.getDate();
@@ -181,7 +181,7 @@ app.get('/order19', (req, res) => {
 })
 
 app.get('/order10', (req, res) => {
-	if (req.session.loginid != null && req.session.loginid == 'loginid' ) {
+	if (req.session.loginid != null && req.session.loginid == process.env.loginid )	{
 	// if (cookieSession.includes(req.sessionID)) 
 		const today = new Date();
 		const todayDate = today.getDate();
@@ -411,7 +411,7 @@ app.post('/delete', async (req, res) => {
 
 
 app.get('/admin', (req, res) => {
-	if (req.session.loginid != null && req.session.loginid == 'loginid' ) {
+	if (req.session.loginid != null && req.session.loginid == process.env.loginid )	{
 		const today = new Date();
 		const todayDate = today.getDate();
 		const todayMonth = today.getMonth();
