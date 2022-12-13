@@ -240,7 +240,7 @@ app.post('/slack', async (req, res) => {
 		try {
 			var options = {
 				method: 'POST',
-				uri: 'https://hooks.slack.com/services/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',
+				uri: process.env.slack_uri,
 				json: true,
 				body: {
 					"text": "Hi <@" + slackUserId.user.id + "> your waffle is ready on level 19!"
@@ -318,7 +318,7 @@ app.post('/slack10', async (req, res) => {
 		try {
 			var options = {
 				method: 'POST',
-				uri: 'https://hooks.slack.com/services/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',
+				uri: process.env.slack_uri,
 				json: true,
 				body: {
 					"text": "Hi <@" + slackUserId.user.id + "> your waffle is ready on level 10!"
@@ -432,7 +432,7 @@ app.post('/flavourform', async (req, res) => {
 		try {
 			var options = {
 				method: 'POST',
-				uri: 'https://hooks.slack.com/services/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',
+				uri: process.env.slack_uri,
 				json: true,
 				body: {
 					"text": slackMessage
