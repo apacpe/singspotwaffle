@@ -4,26 +4,34 @@ const session = require('express-session');
 const request = require('request-promise-native');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectID;
+var cookieSession = require('cookie-session')
 
+app.use(cookieSession({
+  name: 'session',
+  secret: 'env-secret',
+
+  // Cookie Options
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}))
 
 var port = process.env.PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-const cookieSession = [];
+// const cookieSession = [];
 global.formisready = false;
 
 app.set("view engine", "ejs");
 app.use('/static', express.static('public'));
 
-app.use(session({
-  secret: Math.random().toString(36).substring(2),
-  resave: true,
-  saveUninitialized: true,
-  cookie: {
-  	maxAge: 12 * 30 * 24 * 60 * 60 * 1000
-  }
-}));
+// app.use(session({
+//   secret: Math.random().toString(36).substring(2),
+//   resave: true,
+//   saveUninitialized: true,
+//   cookie: {
+//   	maxAge: 12 * 30 * 24 * 60 * 60 * 1000
+//   }
+// }));
 const CONNECTION_URL = "mongodb+srv://apacpe:apacpesupport@cluster0.lwey7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const DATABASE_NAME = "singspotwaffles"; // you can change the database name
 var database, collectionWaffle, collectionFlavour;
@@ -138,7 +146,8 @@ app.post('/submitadmin10', (req, res) => {
 })
 
 app.get('/login', (req, res) => {
-	if (cookieSession.includes(req.sessionID)) {
+	// if (cookieSession.includes(req.sessionID)) {
+	if (req.session.loginid != null && req.session.loginid == 'loginid' )	{
 		res.redirect('/admin');
 	} else {
 		res.render('login');
@@ -147,7 +156,8 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
 	if (req.body.password == 'Waff1ef0rl1f3') {
-		cookieSession.push(req.sessionID);
+		// cookieSession.push(req.sessionID);
+		req.session.loginid = 'loginid'
 		res.redirect('/admin');
 	} else {
 		res.send("Sorry wrong password! Don't try again.");
@@ -155,7 +165,8 @@ app.post('/login', (req, res) => {
 })
 
 app.get('/order19', (req, res) => {
-	if (cookieSession.includes(req.sessionID)) {
+	if (req.session.loginid != null && req.session.loginid == 'loginid' ) {
+	// if (cookieSession.includes(req.sessionID)) 
 		const today = new Date();
 		const todayDate = today.getDate();
 		const todayMonth = today.getMonth();
@@ -170,7 +181,8 @@ app.get('/order19', (req, res) => {
 })
 
 app.get('/order10', (req, res) => {
-	if (cookieSession.includes(req.sessionID)) {
+	if (req.session.loginid != null && req.session.loginid == 'loginid' ) {
+	// if (cookieSession.includes(req.sessionID)) 
 		const today = new Date();
 		const todayDate = today.getDate();
 		const todayMonth = today.getMonth();
@@ -399,7 +411,7 @@ app.post('/delete', async (req, res) => {
 
 
 app.get('/admin', (req, res) => {
-	if (cookieSession.includes(req.sessionID)) {
+	if (req.session.loginid != null && req.session.loginid == 'loginid' ) {
 		const today = new Date();
 		const todayDate = today.getDate();
 		const todayMonth = today.getMonth();
